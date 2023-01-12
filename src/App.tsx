@@ -48,6 +48,17 @@ export const App: React.FC = () => {
     setProducts(filteredProducts);
   };
 
+  const handleQueryFilter = (search : string) => {
+    const filteredProducts = preparedProducts.filter(product => (
+      (product.name).toLowerCase().includes(search.toLowerCase())
+      || (product.category?.title)?.toLowerCase().includes(search.toLowerCase())
+      || (product.category?.user?.name)?.toLowerCase()
+        .includes(search.toLowerCase())
+    ));
+
+    return filteredProducts;
+  };
+
   const showAll = () => {
     setCurrentUser(null);
     setProducts(preparedProducts);
@@ -100,6 +111,7 @@ export const App: React.FC = () => {
                   placeholder="Search"
                   value={query}
                   onChange={(event) => {
+                    setProducts(handleQueryFilter(event.target.value));
                     setQuery(event.target.value);
                   }}
                 />
