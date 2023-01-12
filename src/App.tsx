@@ -35,6 +35,7 @@ const preparedProducts: Product[] = productsFromServer.map(product => (
 ));
 
 export const App: React.FC = () => {
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [products, setProducts] = useState(preparedProducts);
   const [query, setQuery] = useState('');
 
@@ -43,10 +44,12 @@ export const App: React.FC = () => {
       product.category?.user?.id === user.id
     ));
 
+    setCurrentUser(user);
     setProducts(filteredProducts);
   };
 
   const showAll = () => {
+    setCurrentUser(null);
     setProducts(preparedProducts);
   };
 
@@ -63,6 +66,9 @@ export const App: React.FC = () => {
               <a
                 data-cy="FilterAllUsers"
                 href="#/"
+                className={cn({
+                  'is-active': currentUser === null,
+                })}
                 onClick={showAll}
               >
                 All
@@ -74,9 +80,9 @@ export const App: React.FC = () => {
                     key={user.id}
                     data-cy="FilterUser"
                     href={`#/${user.id}`}
-                    // className={cn({
-                    //   'is-active': selectedUser.id === user.id,
-                    // })}
+                    className={cn({
+                      'is-active': currentUser?.id === user.id,
+                    })}
                     onClick={() => handleUserFilter(user)}
                   >
                     {user.name}
