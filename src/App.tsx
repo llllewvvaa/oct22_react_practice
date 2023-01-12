@@ -97,7 +97,7 @@ export const App: React.FC = () => {
                   <a
                     key={user.id}
                     data-cy="FilterUser"
-                    href={`#/${user.id}`}
+                    href="#/"
                     className={cn({
                       'is-active': currentUser?.id === user.id,
                     })}
@@ -168,9 +168,17 @@ export const App: React.FC = () => {
                     )}
                     href="#/"
                     onClick={() => {
-                      setCurrentCategory((prev) => {
-                        return [...prev, category.id];
-                      });
+                      if (currentCategory.includes(category.id)) {
+                        setCurrentCategory((prev) => {
+                          return [...prev.filter((id) => id !== category.id)];
+                        });
+                      }
+
+                      if (!currentCategory.includes(category.id)) {
+                        setCurrentCategory((prev) => {
+                          return [...prev, category.id];
+                        });
+                      }
                     }}
                   >
                     {category.title}
@@ -192,7 +200,6 @@ export const App: React.FC = () => {
                     'is-outlined': !currentCategory.length,
                   },
                 )}
-                // className="button is-link is-fullwidth"
               >
                 Reset all filters
               </a>
