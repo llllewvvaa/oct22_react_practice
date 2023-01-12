@@ -38,6 +38,9 @@ export const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [products, setProducts] = useState(preparedProducts);
   const [query, setQuery] = useState('');
+  const [currentCategory,
+    setCurrentCategory,
+  ] = useState<number[] >([0]);
 
   const handleUserFilter = (user: User) => {
     const filteredProducts = preparedProducts.filter(product => (
@@ -58,6 +61,10 @@ export const App: React.FC = () => {
 
     return filteredProducts;
   };
+
+  // const handleCategory = (event) => {
+  //
+  // };
 
   const showAll = () => {
     setCurrentUser(null);
@@ -128,6 +135,10 @@ export const App: React.FC = () => {
                         data-cy="ClearButton"
                         type="button"
                         className="delete"
+                        onClick={() => {
+                          setQuery('');
+                          setProducts(preparedProducts);
+                        }}
                       />
                     </span>
                   )
@@ -144,36 +155,28 @@ export const App: React.FC = () => {
                 All
               </a>
 
-              <a
-                data-cy="Category"
-                className="button mr-2 my-1 is-info"
-                href="#/"
-              >
-                Category 1
-              </a>
-
-              <a
-                data-cy="Category"
-                className="button mr-2 my-1"
-                href="#/"
-              >
-                Category 2
-              </a>
-
-              <a
-                data-cy="Category"
-                className="button mr-2 my-1 is-info"
-                href="#/"
-              >
-                Category 3
-              </a>
-              <a
-                data-cy="Category"
-                className="button mr-2 my-1"
-                href="#/"
-              >
-                Category 4
-              </a>
+              {categoriesFromServer.map((category) => {
+                return (
+                  <a
+                    key={category.id}
+                    data-cy="Category"
+                    className={cn(
+                      'button mr-2 my-1',
+                      {
+                        'is-info': currentCategory.includes(category.id),
+                      },
+                    )}
+                    href="#/"
+                    onClick={() => {
+                      setCurrentCategory((prev) => {
+                        return [...prev, category.id];
+                      });
+                    }}
+                  >
+                    {category.title}
+                  </a>
+                );
+              })}
             </div>
 
             <div className="panel-block">
