@@ -40,7 +40,7 @@ export const App: React.FC = () => {
   const [query, setQuery] = useState('');
   const [currentCategory,
     setCurrentCategory,
-  ] = useState<number[] >([0]);
+  ] = useState<number[] >([]);
 
   const handleUserFilter = (user: User) => {
     const filteredProducts = preparedProducts.filter(product => (
@@ -183,8 +183,16 @@ export const App: React.FC = () => {
               <a
                 data-cy="ResetAllButton"
                 href="#/"
-                className="button is-link is-outlined is-fullwidth"
-
+                onClick={() => {
+                  setCurrentCategory([]);
+                }}
+                className={cn(
+                  'button is-link is-fullwidth',
+                  {
+                    'is-outlined': !currentCategory.length,
+                  },
+                )}
+                // className="button is-link is-fullwidth"
               >
                 Reset all filters
               </a>
