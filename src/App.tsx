@@ -1,11 +1,15 @@
-import React from 'react';
+import cn from 'classnames';
+import React, { useState } from 'react';
+import { Product } from './components/Product/Product';
 import './App.scss';
 
-// import usersFromServer from './api/users';
+import usersFromServer from './api/users';
 // import productsFromServer from './api/products';
 // import categoriesFromServer from './api/categories';
 
 export const App: React.FC = () => {
+  const [selectedUser, setSelectedUser] = useState(usersFromServer[0]);
+
   return (
     <div className="section">
       <div className="container">
@@ -23,27 +27,23 @@ export const App: React.FC = () => {
                 All
               </a>
 
-              <a
-                data-cy="FilterUser"
-                href="#/"
-              >
-                User 1
-              </a>
-
-              <a
-                data-cy="FilterUser"
-                href="#/"
-                className="is-active"
-              >
-                User 2
-              </a>
-
-              <a
-                data-cy="FilterUser"
-                href="#/"
-              >
-                User 3
-              </a>
+              {usersFromServer.map((user) => {
+                return (
+                  <a
+                    key={user.id}
+                    data-cy="FilterUser"
+                    href="#/"
+                    className={cn({
+                      'is-active': selectedUser.id === user.id,
+                    })}
+                    onChange={() => {
+                      setSelectedUser(user);
+                    }}
+                  >
+                    {user.name}
+                  </a>
+                );
+              })}
             </p>
 
             <div className="panel-block">
@@ -186,55 +186,7 @@ export const App: React.FC = () => {
               </tr>
             </thead>
 
-            <tbody>
-              <tr data-cy="Product">
-                <td className="has-text-weight-bold" data-cy="ProductId">
-                  1
-                </td>
-
-                <td data-cy="ProductName">Milk</td>
-                <td data-cy="ProductCategory">🍺 - Drinks</td>
-
-                <td
-                  data-cy="ProductUser"
-                  className="has-text-link"
-                >
-                  Max
-                </td>
-              </tr>
-
-              <tr data-cy="Product">
-                <td className="has-text-weight-bold" data-cy="ProductId">
-                  2
-                </td>
-
-                <td data-cy="ProductName">Bread</td>
-                <td data-cy="ProductCategory">🍞 - Grocery</td>
-
-                <td
-                  data-cy="ProductUser"
-                  className="has-text-danger"
-                >
-                  Anna
-                </td>
-              </tr>
-
-              <tr data-cy="Product">
-                <td className="has-text-weight-bold" data-cy="ProductId">
-                  3
-                </td>
-
-                <td data-cy="ProductName">iPhone</td>
-                <td data-cy="ProductCategory">💻 - Electronics</td>
-
-                <td
-                  data-cy="ProductUser"
-                  className="has-text-link"
-                >
-                  Roma
-                </td>
-              </tr>
-            </tbody>
+            <Product />
           </table>
         </div>
       </div>
